@@ -4,6 +4,10 @@
 %  Date:   12.03.2020
 %--------------------------------------------------------------------------
 
+%% Add subdirectories to path
+addpath("classes");
+addpath("functions");
+
 %% Define range of orbit height and nodal days and inclination
 hr = [350, 450];                            % altitude range in km
 ndr = [1, 3];                               % nodal days range 
@@ -24,9 +28,10 @@ lan = 0;                % initial RAAN in degrees
 man = 0;                % initial mean anomaly 
 ecc = 0;                % eccentricity
 
-[efp,tim,iop]=reporbgen_noderot2(nod,nor,rep,num,dur,sma,inc,lan,man,ecc)
+%[efp,tim,iop]=reporbgen_noderot2(nod,nor,rep,num,dur,sma,inc,lan,man,ecc)
 
 %% Compute sensor GSD and swath width for given orbits
 
 % define sensor objects
 MultiScape100 = CubySensor("MultiScape100", 580e-3, 5.4e-6, 4096);
+MultiScape100.getSwathwidthGSD(500e3);
