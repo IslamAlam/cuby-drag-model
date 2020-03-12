@@ -21,6 +21,8 @@ Git repository for the Cuby project
 10. Enter your Gitlab credentials
 11. Done. The repo should now be on your computer.
 
+**Note**: For switching branches, mergin, push / pull etc. right click again in the white space in the Matlab explorer and look under "Source control"
+
 
 ## Orbit_design directory
 - put every function in the "functions" directory
