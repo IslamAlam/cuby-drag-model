@@ -5,7 +5,7 @@ Git repository for the Cuby project
 - make sure you have Git installed
 - make sure to understand how git is used (branches, merge requests, etc.). There are plenty of online tutorials and it's not complicated. If you have any questions, ask :)
 - never (!!!) work in the master branch. Whenever you want to add something (e.g. a new function) create a new branch. If you're done with the new feature, create a merge request!
-- :)
+
 
 ## Connect the repository with Matlab
 
