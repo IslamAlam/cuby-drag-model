@@ -41,3 +41,8 @@ MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
 
 parameters = [sma, lan, inc, ecc, aop, sw/1000, GSD, rop(1,3)];
 plot_orbits3D(efp, parameters), hold on;
+
+%% Plot Bavaria area on top of earth coast
+Earth_coast(2)
+hold on;
+Bavaria_border(2)
