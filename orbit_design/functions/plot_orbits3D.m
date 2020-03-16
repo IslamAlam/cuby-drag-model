@@ -42,7 +42,7 @@ ann.LineStyle = 'None';
 
 %% Plot swath over bavaria  
 subplot(2,2,3:4);
-title(sprintf('Ground swath over Bavaria - Swathwidth: %.2 km, GSD %.2 m', param(6), param(7)));
+title('Ground swath over Bavaria');
 
 end
 
