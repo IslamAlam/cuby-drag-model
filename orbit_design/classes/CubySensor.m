@@ -16,6 +16,8 @@ classdef CubySensor
         pixel_pitch
         s_prime
         numx
+        GSD
+        swathwidth
         
     end
     
@@ -28,6 +30,7 @@ classdef CubySensor
             obj.pixel_pitch = pixel_pitch;
             obj.s_prime = pixel_pitch * numx;
             obj.numx = numx;
+            
         end
         
         function [swathwidth, GSD] = getSwathwidthGSD(obj,hg)
