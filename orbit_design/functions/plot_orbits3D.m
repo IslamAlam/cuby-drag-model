@@ -25,8 +25,8 @@ fig3d = gca;
 title("Orbit in Earth-fixed reference frame");
 
 %% plot orbit information as a table
-T = table(param(:), 'VariableNames', "Relevant properties", ...
-    'RowNames',{'a [m]:', 'RAAN [°]:','i [°]:', 'e:', sprintf('\\omega[°]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]'});
+T = table(param(:), 'VariableNames', "Parameter", ...
+    'RowNames',{'a [m]:', 'RAAN [°]:','i [°]:', 'e:', sprintf('\\omega[°]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]', 'Eclipse time [min]', 'Orbital period [min]'});
 % Get the table in string form.
 TString = evalc('disp(T)');
 % Use TeX Markup for bold formatting and underscores.
@@ -43,6 +43,8 @@ ann.LineStyle = 'None';
 %% Plot swath over bavaria  
 subplot(2,2,3:4);
 title('Ground swath over Bavaria');
+xlim([0,10]);
+
 
 end
 
