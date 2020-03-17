@@ -40,7 +40,7 @@ MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
 
 %% Compute eclipse time for the orbit in minutes
 Theta = 0; % Angle between Vernal Equinox and direction to sun. 0° is March 21.
-te = eclipse_time(90, inc, tr, sma, 90) /60; % eclipse time in minutes
+te = eclipse_time(lan, inc, tr, sma, Theta) /60; % eclipse time in minutes
 to = tr / 60; % orbital period in minutes 
 %% Plot the orbits
 
