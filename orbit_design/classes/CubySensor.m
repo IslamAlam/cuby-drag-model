@@ -44,8 +44,9 @@ classdef CubySensor
             mb =  hg / obj.focal_length;
             swathwidth = mb * obj.s_prime;  % meter
             GSD = swathwidth / obj.numx;    % meter 
-            fprintf("\n\nSensor name: \t\t\t%s\nHeight above ground:\t%f km \nSwath width: \t\t\t%f km \nGSD: \t\t\t\t\t%f m \n", obj.name, hg/1e3,swathwidth/1e3, GSD);
-            
+            fprintf('\n------------------------------------------------');
+            fprintf("\nSensor name: \t\t\t%s\nHeight above ground:\t%f km \nSwath width: \t\t\t%f km \nGSD: \t\t\t\t\t%f m \n", obj.name, hg/1e3,swathwidth/1e3, GSD);
+            fprintf('------------------------------------------------');
         end
 
     end

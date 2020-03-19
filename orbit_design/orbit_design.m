@@ -33,7 +33,6 @@ tr  = rop(1,6);                 % revolution period for one orbit i s
 [efp,tim,iop]=reporbgen_noderot2(nod,nor,rep,num,dur,sma,inc,lan,man,ecc,aop);
 
 %% Compute sensor GSD and swath width for given orbits
-
 % define sensor objects and compute swathwidth and GSD at a given altitude
 MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
 [sw GSD] = MultiScape100.getSwathwidthGSD(rop(1,3)*1000);
@@ -42,20 +41,24 @@ MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
 Theta = 0; % Angle between Vernal Equinox and direction to sun. 0° is March 21.
 te = eclipse_time(lan, inc, tr, sma, Theta) /60; % eclipse time in minutes
 to = tr / 60; % orbital period in minutes 
-%% Plot the orbits (updated 200319) with swath
 
+%% Plot the orbits (updated 200319) with swath
 parameters = [sma, lan, inc, ecc, aop, sw/1000, GSD, rop(1,3), te, to];
 % plot_orbits3D(efp, parameters), hold on;
 [sw_dir,sw_start,sw_end,sw_start_lon,sw_start_lat,sw_end_lon,sw_end_lat] = swath(efp,sw);
 plot_orbits3D(efp, parameters,sw_start,sw_end);
 
 %% Plot Bavaria area on top of earth coast
-
 Earth_coast(2)
 hold on;
 Bavaria_border(2)
 
-%% Swath Width of Whole bavaria area [to be edited]
+%% Swath width of the whole bavaria area [to be edited]
 bavaria_lat = load('bavaria_lat.dat');
 bavaria_long = load('bavaria_long.dat');
 [bavaria_x,bavaria_y] = wgs2utm(bavaria_lat,bavaria_long,32,'N');
+
+%% Assuming satellites are on same orbital track
+% compute the required delta t between the satellites so that they the
+% swaths overlap with the specified amount
+dt = timeDeltaAlongTrack(inc, sw, 0);
