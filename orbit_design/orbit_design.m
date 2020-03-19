@@ -7,7 +7,7 @@ close all, clear all, clc;
 %% Add subdirectories to path
 addpath('classes');
 addpath('functions');
-
+addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
 hr = [350, 450];                            % altitude range in km
 ndr = [1, 3];                               % nodal days range 
@@ -42,7 +42,7 @@ MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
 Theta = 0; % Angle between Vernal Equinox and direction to sun. 0° is March 21.
 te = eclipse_time(lan, inc, tr, sma, Theta) /60; % eclipse time in minutes
 to = tr / 60; % orbital period in minutes 
-%% Plot the orbits (updatd 200319) with swath
+%% Plot the orbits (updated 200319) with swath
 
 parameters = [sma, lan, inc, ecc, aop, sw/1000, GSD, rop(1,3), te, to];
 % plot_orbits3D(efp, parameters), hold on;

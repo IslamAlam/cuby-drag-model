@@ -26,7 +26,7 @@ title("Orbit in Earth-fixed reference frame");
 
 %% plot orbit information as a table
 T = table(param(:), 'VariableNames', "Relevant properties", ...
-    'RowNames',{'a [m]:', 'RAAN []:','i []:', 'e:', sprintf('\\omega[]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]'});
+    'RowNames',{'a [m]:', 'RAAN []:','i []:', 'e:', sprintf('\\omega[]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]', 'Eclipse time [s]', 'Orbital period [s]'});
 % Get the table in string form.
 TString = evalc('disp(T)');
 % Use TeX Markup for bold formatting and underscores.
