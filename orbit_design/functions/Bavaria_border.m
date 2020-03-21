@@ -2,8 +2,9 @@ function [] = Bavaria_border(dim)
 
 % Draw the border line of Bavaria in 2D or 3D
 % Amend from Earth coast.m (Yvonne Ip, 16/03/2020)
-% dim = 2 for 2D
-% dim = 3 for 3D
+% dim = 2 for 2D [lat,lon]
+% dim = 'UTM' for 2D [x,y] UTM 32N
+% dim = 3 for 3D [lat,lon]
 
 
 RE = 6371*1000;
@@ -12,10 +13,14 @@ long = load('bavaria_long.dat');
 
 if dim == 2
     plot(long,lat)
-    xlim([-180 180])
-    ylim([-90 90])
-    set(gca,'Xtick',-180:30:180)
-    set(gca,'Ytick',-90:30:90)
+%     xlim([-180 180])
+%     ylim([-90 90])
+%     set(gca,'Xtick',-180:30:180)
+%     set(gca,'Ytick',-90:30:90)
+
+elseif dim == 'UTM'
+    [x,y] = wgs2utm(lat,long,32,'N');
+    plot(x,y)
     
 elseif dim == 3
     lat = lat*pi/180;

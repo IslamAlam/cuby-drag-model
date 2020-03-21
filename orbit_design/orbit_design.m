@@ -53,10 +53,9 @@ Earth_coast(2)
 hold on;
 Bavaria_border(2)
 
-%% Swath width of the whole bavaria area [to be edited]
-bavaria_lat = load('bavaria_lat.dat');
-bavaria_long = load('bavaria_long.dat');
-[bavaria_x,bavaria_y] = wgs2utm(bavaria_lat,bavaria_long,32,'N');
+
+%% Swath width of the whole bavaria area
+[sw_tot] = Bavaria_total_swaith(sw_start_lat,sw_start_lon,sw_end_lat,sw_end_lon);
 
 %% Assuming satellites are on same orbital track
 % compute the required delta t between the satellites so that they the

@@ -18,8 +18,8 @@ function [sw_dir,sw_start,sw_end,sw_start_lon,sw_start_lat,sw_end_lon,sw_end_lat
 
 sw_dir = cross(efp(:,1:3),efp(:,4:6));
 sw_dir = sw_dir./vecnorm(sw_dir,2);
-sw_start = efp(:,1:3)-(sw/2).*sw_dir;
-sw_end = efp(:,1:3)+(sw/2).*sw_dir;
+sw_start = efp(:,1:3)+(sw/2).*sw_dir;
+sw_end = efp(:,1:3)-(sw/2).*sw_dir;
 
 sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
 sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));

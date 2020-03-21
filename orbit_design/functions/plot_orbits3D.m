@@ -15,7 +15,7 @@ posy = efp(:,2);
 posz = efp(:,3);
 
 % plot the orbit
-subplot(2,2,1);
+subplot(2,3,1);
 plot3(posx,posy,posz); hold on;
 Earth_coast(3);
 % hide axis
@@ -25,7 +25,7 @@ fig3d = gca;
 title("Orbit in Earth-fixed reference frame");
 
 %% plot orbit information as a table
-T = table(param(:), 'VariableNames', "Relevant properties", ...
+T = table(param(:), 'VariableNames', "RelevantProperties", ...
     'RowNames',{'a [m]:', 'RAAN []:','i []:', 'e:', sprintf('\\omega[]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]', 'Eclipse time [s]', 'Orbital period [s]'});
 % Get the table in string form.
 TString = evalc('disp(T)');
@@ -46,31 +46,57 @@ lat_max = 52;
 long_min = 8;
 long_max = 15;
 
+[x_min,y_min] = wgs2utm(lat_min,long_min,32,'N');
+[x_max,y_max] = wgs2utm(lat_max,long_max,32,'N');
+
 %% Convert to lat lon
 lon=rad2deg(atan2(efp(:,2),posx));
 lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
 
+[x y] = wgs2utm(lat,lon,32,'N');
+
 sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
 sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));
+[sw_start_x sw_start_y] = wgs2utm(sw_start_lat,sw_start_lon,32,'N');
 
 sw_end_lon=rad2deg(atan2(sw_end(:,2),sw_end(:,1)));
 sw_end_lat=rad2deg(atan(sw_end(:,3)./(sw_end(:,1).^2+sw_end(:,2).^2).^0.5));
+[sw_end_x sw_end_y] = wgs2utm(sw_end_lat,sw_end_lon,32,'N');
 
 ind = find(lat > lat_min & lat < lat_max & lon > long_min & lon < long_max);
 
 sw_lon = [sw_start_lon(ind) sw_end_lon(ind)];
 sw_lat = [sw_start_lat(ind) sw_end_lat(ind)];
 
-%% Plot swath over bavaria  
-subplot(2,2,3:4);
-plot(lon(ind),lat(ind),'.');hold on;
-for i = 1:length(sw_lon)
-    plot(sw_lon(i,:),sw_lat(i,:),'Color',[0,0,0,0.5]);
-    hold on;
-end
+sw_x = [sw_start_x(ind) sw_end_x(ind)];
+sw_y = [sw_start_y(ind) sw_end_y(ind)];
+
+
+
+
+
+%% Plot swath over globe (2D, WGS)  
+subplot(2,3,4:5);
+plot(lon,lat,'.');hold on;
+Earth_coast(2);hold on;
 Bavaria_border(2);
-xlim([long_min long_max])
-ylim([lat_min lat_max])
-title('Ground swath over Bavaria (WGS)');
+xlabel('Longtitude [degree]');
+ylabel('Latitude [degree]');
+title('Ground track over globe (WGS)');
+% pbaspect([1 1 1]) % Square lat-lon grid
+
+subplot(2,3,6);
+plot(x(ind),y(ind),'.');hold on;
+for i = 1:length(sw_lon)
+    plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]);
+    hold on
+end
+Bavaria_border('UTM');
+xlim([x_min x_max])
+ylim([y_min y_max])
+xlabel('x [m]');
+ylabel('y [m]');
+title('Ground swath over Bavaria (UTM32N)');
+pbaspect([1 1 1]) 
 
 end
