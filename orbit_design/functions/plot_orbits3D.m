@@ -1,4 +1,4 @@
-function [] = plot_orbits3D(efp, param,sw_start,sw_end)
+function [] = plot_orbits3D(efp, param,sw_start,sw_end, sw, color)
 %% Cuby Project - Technical University of Munich
 %  Purpose: Orbit design
 %  Author: Max Helleis
@@ -26,7 +26,7 @@ title("Orbit in Earth-fixed reference frame");
 
 %% plot orbit information as a table
 T = table(param(:), 'VariableNames', "RelevantProperties", ...
-    'RowNames',{'a [m]:', 'RAAN []:','i []:', 'e:', sprintf('\\omega[]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]', 'Eclipse time [s]', 'Orbital period [s]'});
+    'RowNames',{'a [m]:', 'RAAN []:','i []:', 'e:', sprintf('\\omega[]:'), 'Swathwidth [km]', 'GSD [m]', 'Altitude [km]', 'Eclipse time [min]', 'Orbital period [min]'});
 % Get the table in string form.
 TString = evalc('disp(T)');
 % Use TeX Markup for bold formatting and underscores.
@@ -72,9 +72,6 @@ sw_x = [sw_start_x(ind) sw_end_x(ind)];
 sw_y = [sw_start_y(ind) sw_end_y(ind)];
 
 
-
-
-
 %% Plot swath over globe (2D, WGS)  
 subplot(2,3,4:5);
 plot(lon,lat,'.');hold on;
@@ -85,11 +82,19 @@ ylabel('Latitude [degree]');
 title('Ground track over globe (WGS)');
 % pbaspect([1 1 1]) % Square lat-lon grid
 
+% get borders of the swath for plotting
+[swlbx, swlby, swrbx, swrby] = getSwathBorder(sw, sw_start_x, sw_start_y, param(3));
+
+% Plot ground track and swath over Bavaria 
 subplot(2,3,6);
-plot(x(ind),y(ind),'.');hold on;
+rangex = find(x<850000 & x>499000);
+rangex = intersect(ind, rangex);
+plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
+plot(swlbx(rangex),swlby(rangex),'-','Color', color);
+plot(swrbx(rangex),swrby(rangex),'-','Color', color);
+
 for i = 1:length(sw_lon)
-    plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]);
-    hold on
+    plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]), hold on;
 end
 Bavaria_border('UTM');
 xlim([x_min x_max])
