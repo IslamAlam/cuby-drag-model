@@ -9,7 +9,7 @@ function te = eclipse_time(Omega, inc, T, r, Theta)
 %   r       Radius of orbit
 
 ie = 23.5;
-R0 = 6378e3;
+R0 = 6378.135e3;            % Earth's radius at equator WGS84 [m] ;
 
 % Compute half-shadow angle alpha
 arg =   cosd(Theta)*sind(Omega)*sind(inc)-...
