@@ -9,8 +9,8 @@ addpath('classes');
 addpath('functions');
 addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
-hr = [350, 450];                            % altitude range in km
-ndr = [1, 3];                               % nodal days range 
+hr = [300, 500];                            % altitude range in km
+ndr = [1, 30];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -19,7 +19,8 @@ rop = RepOrbParam(hr,ndr,i);
 % required delta in longitude
 dLOAN = 0; % initializing, will be changed in first iteration
 
-num_sats = 24; 
+num_sats = 7; 
+rev_no = [1 32 63];
 % 25 for 410 km altitude with 10 % overlap / ascending
 % 23-24 for 410 km altitude with 5 % overlap / ascending
 % 27 for 410 km altitude with 5 % overlap / descending
@@ -28,8 +29,9 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 1; % selects which output of the RepOrbParam function to plot
-start_LOAN = [25.1, 5];
+selector = 48; % selects which output of the RepOrbParam function to plot
+% start_LOAN = [25.1, 5];
+start_LOAN = 25.1;
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
 
@@ -39,15 +41,19 @@ for num_sat = 1:num_sats
     nor = rop(selector,2);                  % number of revolutions
     rep = 0;                                % set exact repeat orbit to False
     num = 10;                               % sampling rate in seconds
-    dur = 2;                             % length of the dataset in days
+    dur = rop(selector,1);                             % length of the dataset in days
+    % dur = rop(selector,6)/(3600*24);                             % length of the dataset in days
     sma = (rop(selector,3) + 6378)*1000;    % semi-major-axis in km
     inc = rop(selector,4);                  % inclination angle in degrees
-    lan = start_LOAN(selector) - (num_sat-1)*dLOAN;   % initial LOAN in degrees
+    % lan = start_LOAN(selector) - (num_sat-1)*dLOAN;   % initial LOAN in degrees
+    lan = start_LOAN - (num_sat-1)*dLOAN;   % initial LOAN in degrees
     man = 0;                                % initial mean anomaly 
     ecc = 0;                                % eccentricity
     aop = 0;                                % initial Argument of Perifee in degrees
     tr  = rop(selector,6);                  % revolution period for one orbit i s
     [efp,tim,iop]=reporbgen_noderot2(nod,nor,rep,num,dur,sma,inc,lan,man,ecc,aop);
+    
+    [efp,tim,iop] = RevFilter(efp,tim,iop,tr,rev_no);
 
 %% Compute sensor GSD and swath width for given orbits
 % define sensor objects and compute swathwidth and GSD at a given altitude
@@ -88,3 +94,14 @@ dt = timeDeltaAlongTrack(inc, sw, overlap);
 baseline  = 60e3; % [m]
 delta_t_base = delta_t_baseline(rop(selector,3), baseline);
 dLOAN_base = dLOAN4dt(delta_t_base, baseline);
+
+%% Create Data table
+orbit_info = OrbitSummaryTable(rop,sw_tot);
+% filename = 'orbit_info.xlsx';
+% writetable(orbit_info,filename);
+
+%% table (Generate orbit_groundtrackshift_summary.txt)
+for n_orbit = 1:193
+    fprintf('\nOrbit No:%.0f\nRepeat Cycle:%.0f \nHeight: %.2f\n', n_orbit, orbit_info.K_days(n_orbit),orbit_info.height_km(n_orbit) );
+    [groundtrackshift_info] = GroundTrackShiftOverTime(orbit_info.K_days(n_orbit),orbit_info.N_tracks(n_orbit),orbit_info.del_lambdarev(n_orbit));
+end

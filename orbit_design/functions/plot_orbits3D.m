@@ -89,9 +89,12 @@ title('Ground track over globe (WGS)');
 subplot(2,3,6);
 rangex = find(x<850000 & x>499000);
 rangex = intersect(ind, rangex);
-plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
-plot(swlbx(rangex),swlby(rangex),'-','Color', color);
-plot(swrbx(rangex),swrby(rangex),'-','Color', color);
+% plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
+% plot(swlbx(rangex),swlby(rangex),'-','Color', color);
+% plot(swrbx(rangex),swrby(rangex),'-','Color', color);
+plot(x(rangex),y(rangex),'.', 'Color', color);hold on;
+plot(swlbx(rangex),swlby(rangex),'.','Color', color);
+plot(swrbx(rangex),swrby(rangex),'.','Color', color);
 
 for i = 1:length(sw_lon)
     plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]), hold on;
