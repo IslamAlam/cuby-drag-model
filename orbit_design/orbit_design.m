@@ -55,6 +55,7 @@ for num_sat = 1:num_sats
 	rev_no = [1 48];
 	[efp,tim,iop] = RevFilter(efp,tim,iop,tr,rev_no);
 
+
 %% Compute sensor GSD and swath width for given orbits
 % define sensor objects and compute swathwidth and GSD at a given altitude
 MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);

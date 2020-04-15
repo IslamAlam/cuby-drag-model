@@ -13,8 +13,6 @@
 %--------------------------------------------------------------------------
 
 function [efp_new,tim_new,iop_new] = RevFilter(efp,tim,iop,tr,rev_no)
-%REVFILTER Summary of this function goes here
-%   Detailed explanation goes here
 [ind,~]=find(tim>= (rev_no-1)*tr & tim<rev_no*tr);
 efp_new = efp(ind,:);
 tim_new = tim(ind);
