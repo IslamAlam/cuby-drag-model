@@ -48,12 +48,14 @@ long_max = 15;
 
 [x_min,y_min] = wgs2utm(lat_min,long_min,32,'N');
 [x_max,y_max] = wgs2utm(lat_max,long_max,32,'N');
+bounding_box = [x_min, x_max; y_min, y_max]; % holds the bouning box for Bavaria
 
 %% Convert to lat lon
 lon=rad2deg(atan2(efp(:,2),posx));
 lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
 
 [x y] = wgs2utm(lat,lon,32,'N');
+ground_track = [x, y];
 
 sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
 sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));
@@ -82,16 +84,16 @@ ylabel('Latitude [degree]');
 title('Ground track over globe (WGS)');
 % pbaspect([1 1 1]) % Square lat-lon grid
 
-% get borders of the swath for plotting
-[swlbx, swlby, swrbx, swrby] = getSwathBorder(sw, sw_start_x, sw_start_y, param(3));
+
 
 % Plot ground track and swath over Bavaria 
 subplot(2,3,6);
-rangex = find(x<850000 & x>499000);
-rangex = intersect(ind, rangex);
-plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
-plot(swlbx(rangex),swlby(rangex),'-','Color', color);
-plot(swrbx(rangex),swrby(rangex),'-','Color', color);
+plot_swath(ground_track, bounding_box, color, sw, param(3));
+% rangex = find(x<850000 & x>499000);
+% rangex = intersect(ind, rangex);
+% plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
+% plot(swlbx(rangex),swlby(rangex),'-','Color', color);
+% plot(swrbx(rangex),swrby(rangex),'-','Color', color);
 
 for i = 1:length(sw_lon)
     plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]), hold on;

@@ -9,8 +9,8 @@ addpath('classes');
 addpath('functions');
 addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
-hr = [350, 450];                            % altitude range in km
-ndr = [1, 3];                               % nodal days range 
+hr = [300, 600];                            % altitude range in km
+ndr = [9, 10];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -19,7 +19,7 @@ rop = RepOrbParam(hr,ndr,i);
 % required delta in longitude
 dLOAN = 0; % initializing, will be changed in first iteration
 
-num_sats = 24; 
+num_sats = 13; 
 % 25 for 410 km altitude with 10 % overlap / ascending
 % 23-24 for 410 km altitude with 5 % overlap / ascending
 % 27 for 410 km altitude with 5 % overlap / descending
@@ -28,7 +28,7 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 1; % selects which output of the RepOrbParam function to plot
+selector = 10; % selects which output of the RepOrbParam function to plot
 start_LOAN = [25.1, 5];
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
@@ -39,10 +39,10 @@ for num_sat = 1:num_sats
     nor = rop(selector,2);                  % number of revolutions
     rep = 0;                                % set exact repeat orbit to False
     num = 10;                               % sampling rate in seconds
-    dur = 2;                             % length of the dataset in days
+    dur = 10;                             % length of the dataset in days
     sma = (rop(selector,3) + 6378)*1000;    % semi-major-axis in km
     inc = rop(selector,4);                  % inclination angle in degrees
-    lan = start_LOAN(selector) - (num_sat-1)*dLOAN;   % initial LOAN in degrees
+    lan = start_LOAN(1) - (num_sat-1)*dLOAN;   % initial LOAN in degrees
     man = 0;                                % initial mean anomaly 
     ecc = 0;                                % eccentricity
     aop = 0;                                % initial Argument of Perifee in degrees
