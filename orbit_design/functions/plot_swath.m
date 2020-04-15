@@ -16,9 +16,11 @@ y_min = bounding_box(2,1);
 y_max = bounding_box(2,2);
 
 % find ground track coordinates in the bounding box
-x_bb_indices = find((x > x_min) & (x < x_max));
-y_bb_indices = find((y > y_min) & (y < y_max));
-bb_indices = intersect(x_bb_indices, y_bb_indices);
+% x_bb_indices = find((x > x_min) & (x < x_max));
+% y_bb_indices = find((y > y_min) & (y < y_max));
+% bb_indices = intersect(x_bb_indices, y_bb_indices);
+
+bb_indices = find((x > x_min) & (x < x_max)& (y > y_min) & (y < y_max));
 
 % find the array elements that belong to different orbital revolutions
 di = diff(bb_indices);
