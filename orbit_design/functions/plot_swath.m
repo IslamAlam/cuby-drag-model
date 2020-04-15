@@ -20,16 +20,25 @@ x_bb_indices = find((x > x_min) & (x < x_max));
 y_bb_indices = find((y > y_min) & (y < y_max));
 bb_indices = intersect(x_bb_indices, y_bb_indices);
 
+
 % find the array elements that belong to different orbital revolutions
 di = diff(bb_indices);
 next_rev = find(di > 1);
+rev_no=length(next_rev)+1;
 if isempty(next_rev)
-    next_rev = length(di);
+    % next_rev = length(di);
+    rev_no=1;
 end
 % plot ground tracks (figure to plot in should be opened at function call)
 start = 1;
-for revs = 1:length(next_rev)
-    rev_range = bb_indices(start+1:next_rev(revs));
+for revs = 1:rev_no
+    % rev_range = bb_indices(start+1:next_rev(revs));
+	if revs == rev_no
+     rev_range = bb_indices(start:end);
+	else
+	 rev_range = bb_indices(start:next_rev(revs));
+	 start = next_rev(revs)+1;
+	end
     
     % get borders of the swath for plotting
     [swlbx, swlby, swrbx, swrby] = getSwathBorder(sw, x(rev_range), y(rev_range), inc);
@@ -37,7 +46,8 @@ for revs = 1:length(next_rev)
     plot(x(rev_range), y(rev_range), '--', 'Color', color); hold on;
     plot(swlbx,swlby,'-','Color', color);
     plot(swrbx,swrby,'-','Color', color);
-    start = next_rev(revs);
+    % start = next_rev(revs);
+
 end
 
 
