@@ -82,18 +82,10 @@ Bavaria_border(2);
 xlabel('Longtitude [degree]');
 ylabel('Latitude [degree]');
 title('Ground track over globe (WGS)');
-% pbaspect([1 1 1]) % Square lat-lon grid
-
-
 
 % Plot ground track and swath over Bavaria 
 subplot(2,3,6);
 plot_swath(ground_track, bounding_box, color, sw, param(3));
-% rangex = find(x<850000 & x>499000);
-% rangex = intersect(ind, rangex);
-% plot(x(rangex),y(rangex),'--', 'Color', color);hold on;
-% plot(swlbx(rangex),swlby(rangex),'-','Color', color);
-% plot(swrbx(rangex),swrby(rangex),'-','Color', color);
 
 for i = 1:length(sw_lon)
     plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]), hold on;

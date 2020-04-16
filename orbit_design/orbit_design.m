@@ -10,7 +10,7 @@ addpath('functions');
 addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
 hr = [300, 500];                            % altitude range in km
-ndr = [1, 30];                               % nodal days range 
+ndr = [3, 5];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -19,7 +19,7 @@ rop = RepOrbParam(hr,ndr,i);
 % required delta in longitude
 dLOAN = 0; % initializing, will be changed in first iteration
 
-num_sats = 13; 
+num_sats = 1; 
 % 25 for 410 km altitude with 10 % overlap / ascending
 % 23-24 for 410 km altitude with 5 % overlap / ascending
 % 27 for 410 km altitude with 5 % overlap / descending
@@ -28,8 +28,8 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 24; % selects which output of the RepOrbParam function to plot
-start_LOAN = 22.4;
+selector = 1; % selects which output of the RepOrbParam function to plot
+start_LOAN = 25.3 % 22.45;
 % start_LOAN = [25.1, 5];
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
@@ -52,8 +52,8 @@ for num_sat = 1:num_sats
     [efp,tim,iop]=reporbgen_noderot2(nod,nor,rep,num,dur,sma,inc,lan,man,ecc,aop);
 	
 	% Filter according specified revolutions
-	rev_no = [1 48];
-	[efp,tim,iop] = RevFilter(efp,tim,iop,tr,rev_no);
+	%rev_no = [1 48];
+	%[efp,tim,iop] = RevFilter(efp,tim,iop,tr,rev_no);
 
 
 %% Compute sensor GSD and swath width for given orbits
@@ -97,12 +97,15 @@ delta_t_base = delta_t_baseline(rop(selector,3), baseline);
 dLOAN_base = dLOAN4dt(delta_t_base, baseline);
 
 %% Create Data table
-orbit_info = OrbitSummaryTable(rop,sw_tot);
+%orbit_info = OrbitSummaryTable(rop,sw_tot);
 % filename = 'orbit_info.xlsx';
 % writetable(orbit_info,filename);
 
 %% table (Generate orbit_groundtrackshift_summary.txt)
-for n_orbit = 24
-    fprintf('\nOrbit No:%.0f\nRepeat Cycle:%.0f \nHeight: %.2f\n', n_orbit, orbit_info.K_days(n_orbit),orbit_info.height_km(n_orbit) );
-    [groundtrackshift_info] = GroundTrackShiftOverTime(orbit_info.K_days(n_orbit),orbit_info.N_tracks(n_orbit),orbit_info.del_lambdarev(n_orbit));
-end
+% for n_orbit = 24
+%     fprintf('\nOrbit No:%.0f\nRepeat Cycle:%.0f \nHeight: %.2f\n', n_orbit, orbit_info.K_days(n_orbit),orbit_info.height_km(n_orbit) );
+%     [groundtrackshift_info] = GroundTrackShiftOverTime(orbit_info.K_days(n_orbit),orbit_info.N_tracks(n_orbit),orbit_info.del_lambdarev(n_orbit));
+% end
+
+%% Compute initial RAAN for orbit
+JD = initialRAAN(start_LOAN);
