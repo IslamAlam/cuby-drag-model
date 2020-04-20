@@ -23,3 +23,4 @@ end
 
 %% Load mass properties and controller gains 
 load('CubeSatStoredValues.mat');
+load('Solar_Activity.mat');
