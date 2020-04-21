@@ -13,6 +13,10 @@ if evalin('base', 'exist(''gains'', ''var'')')
     stored.gains = evalin('base', 'gains');
 end
 
+if evalin('base', 'exist(''KeplerianElements'', ''var'')')
+    stored.KeplerianElements = evalin('base', 'KeplerianElements');
+end
+
 save(fullfile(fileparts(mfilename('fullpath')), 'CubeSatStoredValues.mat'), '-struct', 'stored');
     
     

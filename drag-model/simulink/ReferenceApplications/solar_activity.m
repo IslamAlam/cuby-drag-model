@@ -23,8 +23,8 @@
 data = importdata('./ReferenceApplications/apr2020f10_prd.txt');
 data1 = data.textdata(6:end,:);  % skip first 6 rows (header)
 
-SM(:,1) = str2double(data1(:,1));
-SM(:,[2,3]) = str2double(data1(:,[4,7]));
+Solar_Activity(:,1) = str2double(data1(:,1));
+Solar_Activity(:,[2,3]) = str2double(data1(:,[4,7]));
 clearvars data data1
 %
 % save('SM_data.mat','SM')
