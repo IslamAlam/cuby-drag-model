@@ -28,8 +28,8 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 1; % selects which output of the RepOrbParam function to plot
-start_LOAN = 25.3 % 22.45;
+selector = 2 ; % selects which output of the RepOrbParam function to plot
+start_LOAN = 24.7 % 22.45;
 % start_LOAN = [25.1, 5];
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
@@ -108,4 +108,4 @@ dLOAN_base = dLOAN4dt(delta_t_base, baseline);
 % end
 
 %% Compute initial RAAN for orbit
-JD = initialRAAN(start_LOAN);
+[JD RAAN_act] = initialRAAN(start_LOAN);
