@@ -9,8 +9,8 @@ addpath('classes');
 addpath('functions');
 addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
-hr = [300, 500];                            % altitude range in km
-ndr = [3, 5];                               % nodal days range 
+hr = [300, 501];                            % altitude range in km
+ndr = [2, 3];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -28,8 +28,8 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 2 ; % selects which output of the RepOrbParam function to plot
-start_LOAN = 24.7 % 22.45;
+selector = 2; % selects which output of the RepOrbParam function to plot
+start_LOAN = 25.4 % 22.45;
 % start_LOAN = [25.1, 5];
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
@@ -40,7 +40,7 @@ for num_sat = 1:num_sats
     nor = rop(selector,2);                  % number of revolutions
     rep = 0;                                % set exact repeat orbit to False
     num = 10;                               % sampling rate in seconds
-    dur = rop(selector,1);                  % length of the dataset in days
+    dur = 0.1%rop(selector,1);                  % length of the dataset in days
     sma = (rop(selector,3) + 6378)*1000;    % semi-major-axis in km
     inc = rop(selector,4);                  % inclination angle in degrees
     % lan = start_LOAN(1) - (num_sat-1)*dLOAN;   % initial LOAN in degrees
@@ -108,4 +108,4 @@ dLOAN_base = dLOAN4dt(delta_t_base, baseline);
 % end
 
 %% Compute initial RAAN for orbit
-[JD RAAN_act] = initialRAAN(start_LOAN);
+[JD True_anom] = trueAnomaly(start_LOAN, tr);
