@@ -25,4 +25,5 @@ variantVisualization = 0;
 
 %% Load mass properties and controller gains 
 load('CubeSatStoredValues.mat');
+load('SphericalHarmonicsStoredValues.mat')
 load('Solar_Activity.mat');
