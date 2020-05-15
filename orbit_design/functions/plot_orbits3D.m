@@ -51,18 +51,21 @@ long_max = 15;
 bounding_box = [x_min, x_max; y_min, y_max]; % holds the bouning box for Bavaria
 
 %% Convert to lat lon
-lon=rad2deg(atan2(efp(:,2),posx));
-lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
+% lon=rad2deg(atan2(efp(:,2),posx));
+% lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
+[lat,lon] = efix2latlon(efp);
 
 [x y] = wgs2utm(lat,lon,32,'N');
 ground_track = [x, y];
 
-sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
-sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));
+% sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
+% sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));
+[sw_start_lat,sw_start_lon] = efix2latlon(sw_start);
 [sw_start_x sw_start_y] = wgs2utm(sw_start_lat,sw_start_lon,32,'N');
 
-sw_end_lon=rad2deg(atan2(sw_end(:,2),sw_end(:,1)));
-sw_end_lat=rad2deg(atan(sw_end(:,3)./(sw_end(:,1).^2+sw_end(:,2).^2).^0.5));
+% sw_end_lon=rad2deg(atan2(sw_end(:,2),sw_end(:,1)));
+% sw_end_lat=rad2deg(atan(sw_end(:,3)./(sw_end(:,1).^2+sw_end(:,2).^2).^0.5));
+[sw_end_lat,sw_end_lon] = efix2latlon(sw_end);
 [sw_end_x sw_end_y] = wgs2utm(sw_end_lat,sw_end_lon,32,'N');
 
 ind = find(lat > lat_min & lat < lat_max & lon > long_min & lon < long_max);
