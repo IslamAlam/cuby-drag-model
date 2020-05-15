@@ -1,4 +1,4 @@
-function [] = plot_orbits3D(efp, param,sw_start,sw_end, sw, color)
+function [] = plot_orbits3D(efp, param,sw_start,sw_end, sw, color, groundtracks, num_sat)
 %% Cuby Project - Technical University of Munich
 %  Purpose: Orbit design
 %  Author: Max Helleis
@@ -75,7 +75,7 @@ sw_y = [sw_start_y(ind) sw_end_y(ind)];
 
 
 %% Plot swath over globe (2D, WGS)  
-subplot(2,3,4:5);
+subplot(2,3,4);
 plot(lon,lat,'.');hold on;
 Earth_coast(2);hold on;
 Bavaria_border(2);
@@ -84,8 +84,14 @@ ylabel('Latitude [degree]');
 title('Ground track over globe (WGS)');
 
 % Plot ground track and swath over Bavaria 
-subplot(2,3,6);
-plot_swath(ground_track, bounding_box, color, sw, param(3));
+figure
+filename = 'data/TandemX_DTM.tif'; 
+[A,R,cmap] = readgeoraster(filename);
+cmap = demcmap([100, 100], 2048);
+% set cmap for value 0 to white
+cmap(1,:) = ones(1,3);
+mapshow(A,cmap,R); hold on;
+plot_swath(ground_track, bounding_box, color, sw, param(3), groundtracks, num_sat); hold on;
 
 for i = 1:length(sw_lon)
     plot(sw_x(i,:),sw_y(i,:),'Color',[0,0,0,0.5]), hold on;
@@ -96,6 +102,9 @@ ylim([y_min y_max])
 xlabel('x [m]');
 ylabel('y [m]');
 title('Ground swath over Bavaria (UTM32N)');
+
 pbaspect([1 1 1]) 
+
+
 
 end

@@ -20,7 +20,7 @@ if dim == 2
 
 elseif dim == 'UTM'
     [x,y] = wgs2utm(lat,long,32,'N');
-    plot(x,y)
+    plot(x,y, 'k-')
     
 elseif dim == 3
     lat = lat*pi/180;

@@ -9,8 +9,8 @@ addpath('classes');
 addpath('functions');
 addpath('functions/wgs2utm');
 %% Define range of orbit height and nodal days and inclination
-hr = [300, 501];                            % altitude range in km
-ndr = [2, 3];                               % nodal days range 
+hr = [300, 500];                            % altitude range in km
+ndr = [1, 2];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -19,7 +19,7 @@ rop = RepOrbParam(hr,ndr,i);
 % required delta in longitude
 dLOAN = 0; % initializing, will be changed in first iteration
 
-num_sats = 1; 
+num_sats = 2; 
 % 25 for 410 km altitude with 10 % overlap / ascending
 % 23-24 for 410 km altitude with 5 % overlap / ascending
 % 27 for 410 km altitude with 5 % overlap / descending
@@ -28,12 +28,12 @@ overlap = 5; % percent
 
 % define a vector containing as many random colors as we have satellites
 rand_color = round(rand(num_sats,3), 4);
-selector = 2; % selects which output of the RepOrbParam function to plot
-start_LOAN = 25.4 % 22.45;
+selector = 1; % selects which output of the RepOrbParam function to plot
+start_LOAN = 25 % 22.45;
 % start_LOAN = [25.1, 5];
 % 25.1 works with ascending node coverage
 % -166 works with descending node coverage
-
+groundtracks = ([]);
 for num_sat = 1:num_sats
     % Compute orbit positions and velocities from the orbit parameters
     nod = rop(selector,1);                  % number of nodal days
@@ -73,13 +73,13 @@ to = tr / 60; % orbital period in minutes
 parameters = [sma, lan, inc, ecc, aop, sw/1000, GSD, rop(selector,3), te, to];
 % plot_orbits3D(efp, parameters), hold on;
 [sw_dir,sw_start,sw_end,sw_start_lon,sw_start_lat,sw_end_lon,sw_end_lat] = swath(efp,sw);
-plot_orbits3D(efp, parameters,sw_start,sw_end, sw, rand_color(num_sat,:));
+groundtracks.("sat_" + string(num_sat)) = ([]);
+plot_orbits3D(efp, parameters,sw_start,sw_end, sw, rand_color(num_sat,:), groundtracks, num_sat);
 
 %% Plot Bavaria area on top of earth coast
 Earth_coast(2)
 hold on;
 Bavaria_border(2)
-
 
 %% Swath width of the whole bavaria area
 [sw_tot] = Bavaria_total_swaith(sw_start_lat,sw_start_lon,sw_end_lat,sw_end_lon, sw, inc);
@@ -109,3 +109,5 @@ dLOAN_base = dLOAN4dt(delta_t_base, baseline);
 
 %% Compute initial RAAN for orbit
 [JD True_anom] = trueAnomaly(start_LOAN, tr);
+
+%% create hi-resolution plot of the ground tracks
