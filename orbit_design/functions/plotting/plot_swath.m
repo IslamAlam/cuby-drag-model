@@ -1,4 +1,4 @@
-function [] = plot_swath(ground_track, bounding_box, color, sw, inc, groundtracks, num_sat)
+function [] = plot_swath(ground_track, bounding_box, color, sw, inc)
 %plot_swath Plots the swath of a satellite over a certain ROI
 %   Arguments
 %       ground_track    -- [x,y] coordinates of the satellite groundtrack (UTM)

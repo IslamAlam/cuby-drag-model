@@ -11,7 +11,7 @@ lat = load('coast_lat.dat');
 long = load('coast_long.dat');
 
 if dim == 2
-    plot(long,lat,'Color',[0,191/255,1])
+    plot(long,lat,'Color',[0,0,0])
     xlim([-180 180])
     ylim([-90 90])
     set(gca,'Xtick',-180:30:180)
@@ -29,7 +29,7 @@ elseif dim == 3
     [x,y,z] = sphere;
     mesh( RE*x, RE*y, RE*z, 'EdgeColor', 'None' );
     hold on;
-    plot3(r(:,1),r(:,2),r(:,3),'Color',[0,191/255,1]);
+    plot3(r(:,1),r(:,2),r(:,3),'Color',[0,0,0]);
     axis equal;
     hold on;
     %plot3([0:100000:50e6],zeros(1,501),zeros(1,501))
