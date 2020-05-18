@@ -1,4 +1,4 @@
-function [] = plot_swath(ground_track, bounding_box, color, sw, inc)
+function [pos_params] = plot_swath(ground_track, bounding_box, color, sensor, coe, cfg)
 %plot_swath Plots the swath of a satellite over a certain ROI
 %   Arguments
 %       ground_track    -- [x,y] coordinates of the satellite groundtrack (UTM)
@@ -8,6 +8,10 @@ function [] = plot_swath(ground_track, bounding_box, color, sw, inc)
 %       inc             -- inclination [°]
 %   Return
 %       None
+
+sw = sensor.sw;
+inc = coe.inc;
+
 x = ground_track(:,1);
 y = ground_track(:,2);
 x_min = bounding_box(1,1);
@@ -42,12 +46,20 @@ for revs = 1:rev_no
     
     % get borders of the swath for plotting
     [swlbx, swlby, swrbx, swrby] = getSwathBorder(sw, x(rev_range), y(rev_range), inc);
-    
+if cfg.plot2d_bav == true
     plot(x(rev_range), y(rev_range), '--', 'Color', color); hold on;
     plot(swlbx,swlby,'-','Color', color);
     plot(swrbx,swrby,'-','Color', color);
-
-    % start = next_rev(revs);
+    pos_params = [];
+end
+if cfg.plot_animation == true
+    pos_params.x = x(rev_range);
+    pos_params.y = y(rev_range);
+    pos_params.swlbx = swlbx;
+    pos_params.swlby = swlby;
+    pos_params.swrbx = swrbx;
+    pos_params.swrby = swrby;
+end
 
 end
 

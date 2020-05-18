@@ -15,7 +15,7 @@ addpath('functions/plotting');
 addpath('functions/plotting/autoArrangeFigures');
 addpath('functions/utils');
 %% Select config and initialize parameters and physical constants
-run cfg_460km.m
+run cfg_410km.m
 run physical_constants
 
 % Compute repeat orbit parameters
