@@ -24,6 +24,12 @@ x_bb_indices = find((x > x_min) & (x < x_max));
 y_bb_indices = find((y > y_min) & (y < y_max));
 bb_indices = intersect(x_bb_indices, y_bb_indices);
 
+pos_params.x  = [];
+pos_params.y =  [];
+pos_params.swlbx = [];
+pos_params.swlby = [];
+pos_params.swrbx = [];
+pos_params.swrby = [];
 
 % find the array elements that belong to different orbital revolutions
 di = diff(bb_indices);
@@ -50,16 +56,17 @@ if cfg.plot2d_bav == true
     plot(x(rev_range), y(rev_range), '--', 'Color', color); hold on;
     plot(swlbx,swlby,'-','Color', color);
     plot(swrbx,swrby,'-','Color', color);
-    pos_params = [];
+
 end
 if cfg.plot_animation == true
-    pos_params.x = x(rev_range);
-    pos_params.y = y(rev_range);
-    pos_params.swlbx = swlbx;
-    pos_params.swlby = swlby;
-    pos_params.swrbx = swrbx;
-    pos_params.swrby = swrby;
+    pos_params.x  = [pos_params.x; nan; x(rev_range)];
+    pos_params.y =  [pos_params.y; nan; y(rev_range)];
+    pos_params.swlbx = [pos_params.swlbx; nan; swlbx];
+    pos_params.swlby = [pos_params.swlby; nan; swlby];
+    pos_params.swrbx = [pos_params.swrbx; nan; swrbx];
+    pos_params.swrby = [pos_params.swrby; nan; swrby];
 end
+
 
 end
 

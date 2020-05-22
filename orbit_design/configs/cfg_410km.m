@@ -14,19 +14,19 @@ cfg.overlap = 5;        % [%]
 cfg.selector = 1;       % Chooses the corresponding orbit 
 
 %% Simulation time
-cfg.sampling_rate = 1; % [s]
+cfg.sampling_rate = 5; % [s]
 cfg.duration = 1      % [days] Sets the simulation time 
 
 %% Animation
 cfg.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation
-cfg.export_movie = false; % Exports the animation. Can take a long time
+cfg.export_movie = true; % Exports the animation. Can take a long time
 cfg.dpi = 300;      % Dots-per-inch of exported movie
 cfg.movie_name = "Ground_plot_movie";
 
 
 %% Plotting option
-cfg.plot3d = true;     % create 3d plot of the orbit around the Earth
-cfg.plot2dww = true;   % create 2d ground track plot world wide
+cfg.plot3d = false;     % create 3d plot of the orbit around the Earth
+cfg.plot2dww = false;   % create 2d ground track plot world wide
 cfg.plot2d_bav = true;  % cretae 2d groun track plot over Bavaria
 cfg.plot_animation = true;  % create animated plot of Bavaria region
 
