@@ -18,5 +18,6 @@ coe.man = 0;
 coe.ecc = 0;
 coe.aop = 0;                % inital argument of perigee
 coe.tr = rop(selector,6);   % [s] revolution period for one orbit
+coe.gts = 360.*(coe.nor-coe.nod)./coe.nor; %Ground track shift in longitude for 1 rev in degree
 end
 
