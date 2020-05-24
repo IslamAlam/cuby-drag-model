@@ -15,7 +15,11 @@ cfg.selector = 1;       % Chooses the corresponding orbit
 
 %% Simulation time
 cfg.sampling_rate = 5; % [s]
-cfg.duration = 1      % [days] Sets the simulation time 
+cfg.duration = 2      % [days] Sets the simulation time 
+
+% Revolution Filter
+cfg.rev_filter = false;
+cfg.rev = [1 48];
 
 %% Animation
 cfg.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation
@@ -25,10 +29,10 @@ cfg.movie_name = "Ground_plot_movie";
 
 
 %% Plotting option
-cfg.plot3d = false;     % create 3d plot of the orbit around the Earth
-cfg.plot2dww = false;   % create 2d ground track plot world wide
-cfg.plot2d_bav = true;  % cretae 2d groun track plot over Bavaria
-cfg.plot_animation = true;  % create animated plot of Bavaria region
+cfg.plot3d = true;     % create 3d plot of the orbit around the Earth
+cfg.plot2dww = true;   % create 2d ground track plot world wide
+cfg.plot2d_bav = false;  % cretae 2d groun track plot over Bavaria
+cfg.plot_animation = false;  % create animated plot of Bavaria region
 
 
 %% Initialize temporary parameters

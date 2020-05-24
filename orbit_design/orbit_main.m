@@ -26,8 +26,8 @@ coe = define_coe(rop, cfg, const);
 
 %% Compute sensor GSD and swath width for given orbits
 % define sensor objects and compute swathwidth and GSD at a given altitude
-MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096);
-[sensor.sw sensor.GSD] = MultiScape100.getSwathwidthGSD(rop(cfg.selector,3)*1000);
+MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096, 10, 2600, 7);
+[sensor.sw sensor.GSD_acrosstrack] = MultiScape100.getSwathwidthGSD(rop(cfg.selector,3)*1000);
 
 % Compute dRAAN for the given swathwidth and the wanted overlap
 dLOAN = dLOAN4swath(sensor.sw, cfg.overlap);
@@ -38,6 +38,11 @@ for num_sat = 1:cfg.num_sats
     [efp,tim,iop]=reporbgen_noderot2(coe.nod, coe.nor, ...
         coe.rep, coe.num, coe.dur, coe.sma, coe.inc, lan, ...
         coe.man, coe.ecc, coe.aop);
+    
+    if cfg.rev_filter == true
+        [efp,tim,iop] = RevFilter(efp,tim,iop,coe.tr,cfg.rev);
+    end
+    
     satellites.('s'+string(num_sat)).lan = lan;
     satellites.('s'+string(num_sat)).efp = efp;
     satellites.('s'+string(num_sat)).tim = tim;
@@ -65,8 +70,17 @@ stereo.baseline  = 60e3; % [m]
 stereo.dt_base = delta_t_baseline(rop(cfg.selector,3), stereo.baseline);
 stereo.dLOAN_base = dLOAN4dt(stereo.dt_base, stereo.baseline);
 
-% %% Total swath width of the bavaria area (dependent on inclination)
-% [sw_tot] = Bavaria_total_swaith(sw_start_lat,sw_start_lon,sw_end_lat,sw_end_lon, sw, inc);
+%% ground track over time
+coe.groundtrackshift_info = GroundTrackShiftOverTime(coe.nod,coe.nor,coe.gts);
 
+%% Downlink
+[roi.acr_track_tot_exd,roi.alo_track_tot_exd,roi.obs_tim,sensor.GSD_alongtrack] = Bavaria_total_extend(satellites.s1.efp,satellites.s1.tim,MultiScape100.line_rate);
+dl_bit = MultiScape100.DownlinkDataVolume(roi.obs_tim);
 
+fname = 'cuby_ground_segment.csv';
+mask_angle = 5;
+bps_S=10e6;
+bps_X=50e6;
+
+stations = ground_stations(satellites.s1.efp,satellites.s1.tim,mask_angle,bps_S,bps_X);
 

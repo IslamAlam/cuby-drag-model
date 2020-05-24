@@ -50,14 +50,15 @@ if cfg.plot_animation == true
     set(h2, 'AlphaData', alpha);
 end
 % loop over all satellites
-for num_sat = 21:23%cfg.num_sats
+for num_sat = cfg.num_sats
    
     posx = satellites.('s' + string(num_sat)).efp(:,1);
     posy = satellites.('s' + string(num_sat)).efp(:,2);
     posz = satellites.('s' + string(num_sat)).efp(:,3);
     %Convert x,y,z to longitude and latitude
-    lon=rad2deg(atan2(posy,posx));
-    lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
+	[lat,lon] = efix2latlon(satellites.('s' + string(num_sat)).efp);
+    % lon=rad2deg(atan2(posy,posx));
+    % lat=rad2deg(atan(posz./(posx.^2+posy.^2).^0.5));
     % 3d orbit plot
     if cfg.plot3d == true
         figure(f_3d);
@@ -81,13 +82,10 @@ for num_sat = 21:23%cfg.num_sats
         % 2d ground track and swath over Bavaria
         [x y] = wgs2utm(lat,lon,32,'N');
         ground_track = [x, y];
-        [sw_dir,sw_start,sw_end,sw_start_lon,sw_start_lat,sw_end_lon,sw_end_lat] = swath(satellites.('s' + string(num_sat)).efp,sensor.sw);
-        sw_start_lon=rad2deg(atan2(sw_start(:,2),sw_start(:,1)));
-        sw_start_lat=rad2deg(atan(sw_start(:,3)./(sw_start(:,1).^2+sw_start(:,2).^2).^0.5));
+        [sw_dir,sw_start,sw_end] = swath(satellites.('s' + string(num_sat)).efp,sensor.sw);
+        [sw_start_lat,sw_start_lon] = efix2latlon(sw_start);
         [sw_start_x, sw_start_y] = wgs2utm(sw_start_lat,sw_start_lon,32,'N');
-        sw_end_lon=rad2deg(atan2(sw_end(:,2),sw_end(:,1)));
-        sw_end_lat=rad2deg(atan(sw_end(:,3)./(sw_end(:,1).^2+sw_end(:,2).^2).^0.5));
-
+        [sw_end_lat,sw_end_lon] = efix2latlon(sw_end);
         [sw_end_x, sw_end_y] = wgs2utm(sw_end_lat,sw_end_lon,32,'N');
 
         ind = find(lat > lat_min & lat < lat_max & lon > long_min & lon < long_max);
