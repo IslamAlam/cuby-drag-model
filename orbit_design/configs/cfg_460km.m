@@ -8,19 +8,40 @@ cfg.ndr = [2, 3];       % nodal days range
 cfg.i = 's';            % stands for 'sun-synchronous'
 cfg.rep = 0;            % Exact orbit repat to False (default)
 
-cfg.num_sats = 10;       % number of satellites
+cfg.num_sats = 21;       % number of satellites
 cfg.overlap = 5;        % [%] 
 
 cfg.selector = 1;       % Chooses the corresponding orbit 
 
 %% Simulation time
-cfg.sampling_rate = 10; % [s]
+cfg.sampling_rate = 1; % [s]
 cfg.duration = 1      % [days] Sets the simulation time 
 
+% Revolution Filter
+cfg.rev_filter = true;
+cfg.rev = [1];
 
+
+%% Animation
+cfg.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation
+cfg.export_movie = false; % Exports the animation. Can take a long time
+cfg.dpi = 300;      % Dots-per-inch of exported movie
+cfg.movie_name = "Ground_plot_movie";
+cfg.plot_dynamic_DTM = false; % if true, more computational expensive
+cfg.plot_ground_track = true; % plot ground track as line
+cfg.plot_swath = true; % plot swath above Bavaria
+
+%% Plotting option
+cfg.plot3d = false;     % create 3d plot of the orbit around the Earth
+cfg.plot2dww = false;   % create 2d ground track plot world wide
+cfg.plot2d_bav = true;  % cretae 2d groun track plot over Bavaria
+cfg.plot_animation = false;  % create animated plot of Bavaria region
+cfg.visualize_bavaria_extent = false; % Plot geographic extent in flight direction
+cfg.swath_color = [0, 0, 0.5]; % rgb triplet defining the color of the ground track
+cfg.plot_only_ascending = true;
 %% Initialize temporary parameters
 cfg.dLOAN = 0;          % [°] initializing, will be changed in first iteration
-cfg.startLOAN = 25;     % [°]
+cfg.startLOAN = 25.3;     % [°]
 
 
 

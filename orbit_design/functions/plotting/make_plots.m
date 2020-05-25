@@ -17,9 +17,8 @@ end
 if cfg.plot_animation == true
     f_anim = figure(4); % handle to fig containing ground track over Bavaria
     if cfg.export_movie == true
-        v = VideoWriter(cfg.movie_name,'Motion JPEG 2000');
-        v.MJ2BitDepth = 8;
-        %v.Quality = 95;
+        v = VideoWriter(cfg.movie_name,'Motion JPEG AVI');
+        v.Quality = 90;
         open(v);
     else
         v = [];
@@ -38,19 +37,34 @@ bounding_box = [x_min, x_max; y_min, y_max];
 % Initialize background for Bavaria plot
 if cfg.plot2d_bav == true
     figure(f_bav);
-    ax_bav = gca()
     [h1] = plot_DTM(bounding_box)
+    ax_bav = gca()
+    offset = 50e3;
+    xlim([x_min + offset,  x_max - offset])
+    ylim([y_min +  offset, y_max - offset])
+    xlabel('x [m]');
+    ylabel('y [m]');
+    Bavaria_border('UTM');
+    title('Ground swath over Bavaria (UTM32N)');
 end
 if cfg.plot_animation == true
     figure(f_anim);
     [h2, size_A, R] = plot_DTM(bounding_box)
     Bavaria_border('UTM');
     ax_bav_anim = gca();
-    alpha = zeros(size_A(1), size_A(2));
-    set(h2, 'AlphaData', alpha);
+    offset = 50e3;
+    xlim([x_min + offset,  x_max - offset])
+    ylim([y_min +  offset, y_max - offset])
+    xlabel('x [m]');
+    ylabel('y [m]');
+    title('Ground swath over Bavaria - animation (UTM32N)');
+    if cfg.plot_dynamic_DTM == true
+        alpha = zeros(size_A(1), size_A(2));
+        set(h2, 'AlphaData', alpha);
+    end
 end
 % loop over all satellites
-for num_sat = cfg.num_sats
+for num_sat = 1:cfg.num_sats
    
     posx = satellites.('s' + string(num_sat)).efp(:,1);
     posy = satellites.('s' + string(num_sat)).efp(:,2);
@@ -97,12 +111,13 @@ for num_sat = cfg.num_sats
 
         if cfg.plot2d_bav == true
                 figure(f_bav);
+                axes(ax_bav)
         end
         pos_params = plot_swath(ground_track, bounding_box, color, sensor, coe, cfg); hold on; 
      
         if cfg.plot_animation == true
            figure(f_anim); 
-
+           axes(ax_bav_anim)
            v = create_2d_animation(pos_params, cfg, bounding_box, h2, size_A, R, v)
            
         end
@@ -125,27 +140,14 @@ if cfg.plot2dww == true
     title('Ground track worldwide (WGS84)');
     grid on;
 end
-if cfg.plot2d_bav == true
-    % groundtrack over Bavaria
-    axes(ax_bav);
-    xlim([x_min x_max])
-    ylim([y_min y_max])
-    xlabel('x [m]');
-    ylabel('y [m]');
-    title('Ground swath over Bavaria (UTM32N)');
-end
 
-if cfg.plot_animation == true
-    % groundtrack over Bavaria
-    axes(ax_bav_anim);
-    xlim([x_min x_max])
-    ylim([y_min y_max])
-    xlabel('x [m]');
-    ylabel('y [m]');
-    title('Ground swath over Bavaria (UTM32N)');
-end
+%% Legends
+axes(ax_bav);
+legend("Ground track", "Ground swath", "Overlap");
 % Arrange all figures
-close(v);
+if cfg.export_movie == true
+    close(v);
+end
 autoArrangeFigures();
 
 

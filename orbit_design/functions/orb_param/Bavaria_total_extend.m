@@ -5,7 +5,7 @@
 %--------------------------------------------------------------------------
 
 % function [sw_tot ind] = Bavaria_total_swath(lat,lon,sw_end_lat,sw_end_lon, sw, inc)
-function [acr_track_tot_exd,alo_track_tot_exd,obs_tim,alongtrack_GSD] = Bavaria_total_extend(efp,tim,line_rate)
+function [acr_track_tot_exd,alo_track_tot_exd,obs_tim,alongtrack_GSD] = Bavaria_total_extend(efp,tim,line_rate, cfg)
 % define bavaria bound box (for plotting and choice of points)
 lat_min = 46;
 lat_max = 52;
@@ -59,20 +59,21 @@ obs_tim=obs_tim*alo_track_tot_exd/norm(flight_dir_xy);
 
 
 % Visuailize result
-Bavaria_border('UTM'); hold on;
-refline(tan(theta),bavaria_y(ind_min_y)-tan(theta)*bavaria_x(ind_min_y)); hold on;
-refline(tan(theta),bavaria_y(ind_max_y)-tan(theta)*bavaria_x(ind_max_y)); hold on;
-refline(tan(theta+pi/2),bavaria_y(ind_min_x)-tan(theta+pi/2)*bavaria_x(ind_min_x)); hold on;
-refline(tan(theta+pi/2),bavaria_y(ind_max_x)-tan(theta+pi/2)*bavaria_x(ind_max_x)); hold on;
+if cfg.visualize_bavaria_extent == true
+    Bavaria_border('UTM'); hold on;
+    refline(tan(theta),bavaria_y(ind_min_y)-tan(theta)*bavaria_x(ind_min_y)); hold on;
+    refline(tan(theta),bavaria_y(ind_max_y)-tan(theta)*bavaria_x(ind_max_y)); hold on;
+    refline(tan(theta+pi/2),bavaria_y(ind_min_x)-tan(theta+pi/2)*bavaria_x(ind_min_x)); hold on;
+    refline(tan(theta+pi/2),bavaria_y(ind_max_x)-tan(theta+pi/2)*bavaria_x(ind_max_x)); hold on;
 
 
-xlim([x_min x_max])
-ylim([y_min y_max])
-xlabel('x [m]');
-ylabel('y [m]');
-title('Bavaria total extend (UTM32N)');
-pbaspect([1 1 1]) 
-
+    xlim([x_min x_max])
+    ylim([y_min y_max])
+    xlabel('x [m]');
+    ylabel('y [m]');
+    title('Bavaria total extend (UTM32N)');
+    pbaspect([1 1 1]) 
+end
 % 
 
 % Display information

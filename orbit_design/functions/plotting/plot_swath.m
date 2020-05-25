@@ -53,10 +53,16 @@ for revs = 1:rev_no
     % get borders of the swath for plotting
     [swlbx, swlby, swrbx, swrby] = getSwathBorder(sw, x(rev_range), y(rev_range), inc);
 if cfg.plot2d_bav == true
-    plot(x(rev_range), y(rev_range), '--', 'Color', color); hold on;
-    plot(swlbx,swlby,'-','Color', color);
-    plot(swrbx,swrby,'-','Color', color);
-
+    for k = 2:length(x(rev_range))
+        polyx = [swlbx(k-1), swlbx(k), swrbx(k), swrbx(k-1)];
+        polyy = [swlby(k-1), swlby(k), swrby(k), swrby(k-1)];
+        patch(polyx, polyy, cfg.swath_color, 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+        % create dummy patch for overlap legend entry
+        patch(nan, nan, cfg.swath_color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+        plot(x(rev_range), y(rev_range), '-', 'Color', [0, 0, 0]); hold on;
+        %plot(swlbx,swlby,'-','Color', color);
+        %plot(swrbx,swrby,'-','Color', color);
+    end
 end
 if cfg.plot_animation == true
     pos_params.x  = [pos_params.x; nan; x(rev_range)];
