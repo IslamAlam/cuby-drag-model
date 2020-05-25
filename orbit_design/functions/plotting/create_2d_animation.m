@@ -27,7 +27,9 @@ swrby = pos_params.swrby;
 alpha = get(h, 'AlphaData');
 %%
 for k = 1:length(gt_x)
-    addpoints(h_gt,gt_x(k),gt_y(k));
+    if cfg.plot_ground_track == true
+        addpoints(h_gt,gt_x(k),gt_y(k));
+    end
     set(hS,'xdata',gt_x(k),'ydata',gt_y(k));
     %addpoints(h_sl, swlbx(k), swlby(k));
     %addpoints(h_sr, swrbx(k), swrby(k));
@@ -36,11 +38,16 @@ for k = 1:length(gt_x)
         polyy = [swlby(k-1), swlby(k), swrby(k), swrby(k-1)];
         [I,J] = worldToDiscrete(R,polyx,polyy);
         
-        if sum(isnan(I)) == 0 || sum(isnan(J)) == 0
-            BW = poly2mask(J, I, size_A(1), size_A(2));
-            alpha(find(BW > 0)) = 1; 
-            set(h, 'AlphaData', alpha);
-        end   
+        if cfg.plot_dynamic_DTM == true
+            if sum(isnan(I)) == 0 || sum(isnan(J)) == 0
+                BW = poly2mask(J, I, size_A(1), size_A(2));
+                alpha(find(BW > 0)) = 1; 
+                set(h, 'AlphaData', alpha);
+            end
+        else
+            patch(polyx, polyy, cfg.swath_color, 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+        end
+  
         
     end
     drawnow;

@@ -15,7 +15,7 @@ addpath('functions/plotting');
 addpath('functions/plotting/autoArrangeFigures');
 addpath('functions/utils');
 %% Select config and initialize parameters and physical constants
-run cfg_410km.m
+run cfg_460km.m
 run physical_constants
 
 % Compute repeat orbit parameters
@@ -74,7 +74,7 @@ stereo.dLOAN_base = dLOAN4dt(stereo.dt_base, stereo.baseline);
 coe.groundtrackshift_info = GroundTrackShiftOverTime(coe.nod,coe.nor,coe.gts);
 
 %% Downlink
-[roi.acr_track_tot_exd,roi.alo_track_tot_exd,roi.obs_tim,sensor.GSD_alongtrack] = Bavaria_total_extend(satellites.s1.efp,satellites.s1.tim,MultiScape100.line_rate);
+[roi.acr_track_tot_exd,roi.alo_track_tot_exd,roi.obs_tim,sensor.GSD_alongtrack] = Bavaria_total_extend(satellites.s1.efp,satellites.s1.tim,MultiScape100.line_rate, cfg);
 dl_bit = MultiScape100.DownlinkDataVolume(roi.obs_tim);
 
 fname = 'cuby_ground_segment.csv';
