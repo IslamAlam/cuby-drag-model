@@ -56,9 +56,9 @@ if cfg.plot2d_bav == true
     for k = 2:length(x(rev_range))
         polyx = [swlbx(k-1), swlbx(k), swrbx(k), swrbx(k-1)];
         polyy = [swlby(k-1), swlby(k), swrby(k), swrby(k-1)];
-        patch(polyx, polyy, cfg.swath_color, 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+        patch(polyx, polyy, cfg.swath_color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
         % create dummy patch for overlap legend entry
-        patch(nan, nan, cfg.swath_color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+        patch(nan, nan, cfg.swath_color, 'FaceAlpha', 0.1, 'EdgeColor', 'none');
         plot(x(rev_range), y(rev_range), '-', 'Color', [0, 0, 0]); hold on;
         %plot(swlbx,swlby,'-','Color', color);
         %plot(swrbx,swrby,'-','Color', color);

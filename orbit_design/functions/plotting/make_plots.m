@@ -25,21 +25,36 @@ if cfg.plot_animation == true
     end
 end
 
-% define bounding box for Bavaria plot
-lat_min = 46.7;
-lat_max = 51;
-long_min = 8;
-long_max = 15;
-[x_min,y_min] = wgs2utm(lat_min,long_min,32,'N');
-[x_max,y_max] = wgs2utm(lat_max,long_max,32,'N');
-bounding_box = [x_min, x_max; y_min, y_max];
+% define bounding box
+if cfg.GermanyAustriaSwitzerland == false
+    % plot only Bavaria region
+    lat_min = 46.7;
+    lat_max = 51;
+    long_min = 8;
+    long_max = 15;
+    offset = 50e3;
+    [x_min,y_min] = wgs2utm(lat_min,long_min,32,'N');
+    [x_max,y_max] = wgs2utm(lat_max,long_max,32,'N');
+    bounding_box = [x_min, x_max; y_min, y_max];
+end
+if cfg.GermanyAustriaSwitzerland == true
+    % plot Germany, Austria and Switzerland
+    lat_min = 44;
+    lat_max = 56;
+    long_min = 4;
+    long_max = 20.5;
+    offset  = 50e3;
+    [x_min,y_min] = wgs2utm(lat_min,long_min,32,'N');
+    [x_max,y_max] = wgs2utm(lat_max,long_max,32,'N');
+    bounding_box = [x_min, x_max; y_min, y_max];
+end
+
 
 % Initialize background for Bavaria plot
 if cfg.plot2d_bav == true
     figure(f_bav);
-    [h1] = plot_DTM(bounding_box)
+    [h1] = plot_DTM(bounding_box, cfg)
     ax_bav = gca()
-    offset = 50e3;
     xlim([x_min + offset,  x_max - offset])
     ylim([y_min +  offset, y_max - offset])
     xlabel('x [m]');
@@ -124,6 +139,7 @@ for num_sat = 1:cfg.num_sats
        
     end
 end
+
 %% Format plots
 if cfg.plot3d == true
     % 3d
@@ -143,7 +159,19 @@ end
 
 %% Legends
 axes(ax_bav);
-legend("Ground track", "Ground swath", "Overlap");
+legend("Overlap", "Ground swath", "Ground track");
+
+if cfg.GermanyAustriaSwitzerland == true
+    % ascending
+    x = [0.55 0.539];
+    y = [0.86 0.92];
+    annotation('textarrow',x,y,'String','ascending orbit')
+    x = [0.45 0.4425];
+    y = [0.17 0.12];
+    %annotation('textarrow',x,y,'String','descending orbit')
+end
+
+Bavaria_border('UTM');
 % Arrange all figures
 if cfg.export_movie == true
     close(v);

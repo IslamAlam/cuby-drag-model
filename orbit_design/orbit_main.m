@@ -8,6 +8,9 @@ close all, clear all, clc;
 addpath('configs');
 addpath('classes');
 addpath('data');
+addpath('data/Germany_shapefile');
+addpath('data/Austria_shapefile');
+addpath('data/Switzerland_shapefile');
 addpath('functions');
 addpath('functions/wgs2utm');
 addpath('functions/orb_param');
@@ -15,7 +18,7 @@ addpath('functions/plotting');
 addpath('functions/plotting/autoArrangeFigures');
 addpath('functions/utils');
 %% Select config and initialize parameters and physical constants
-run cfg_460km.m
+run cfg_410km.m
 run physical_constants
 
 % Compute repeat orbit parameters
