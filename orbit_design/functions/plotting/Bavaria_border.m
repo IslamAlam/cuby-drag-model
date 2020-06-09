@@ -20,7 +20,7 @@ if dim == 2
 
 elseif dim == 'UTM'
     [x,y] = wgs2utm(lat,long,32,'N');
-    plot(x,y, '-', 'LineWidth', 1.5, 'Color', [255 255 255]/255,'HandleVisibility','off')
+    plot(x,y, '-', 'LineWidth', 1.5, 'Color', [1 1 1],'HandleVisibility','off')
    
 elseif dim == 3
     lat = lat*pi/180;

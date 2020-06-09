@@ -37,7 +37,7 @@ cfg.plot2d_bav = true;  % cretae 2d groun track plot over Bavaria
 cfg.plot_animation = false;  % create animated plot of Bavaria region
 cfg.visualize_bavaria_extent = false; % Plot geographic extent in flight direction
 cfg.swath_color = [0, 0, 0.5]; % rgb triplet defining the color of the ground track
-cfg.GermanyAustriaSwitzerland = false; % if true, plots the ground swath 
+cfg.GermanyAustriaSwitzerland = true; % if true, plots the ground swath 
 % over Germany, Austrie and Switzerland
 
 %% Initialize temporary parameters

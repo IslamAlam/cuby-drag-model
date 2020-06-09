@@ -12,6 +12,7 @@ if cfg.GermanyAustriaSwitzerland == false
 elseif cfg.GermanyAustriaSwitzerland == true
     filename = 'SRTM_Austria_Switzerland_Germany_32N_Resampled.tif';
     Germany_shp = shaperead('Germany_border_32N.shp');
+    Germany_NUTS_shp = shaperead('Germany_NUTS_L1.shp');
     Austria_shp = shaperead('Austria_border_32N.shp');
     Switzerland_shp = shaperead('Switzerland_border_32N.shp');
     nodata = 5000;
@@ -35,6 +36,11 @@ if cfg.GermanyAustriaSwitzerland == true
     plot(x_GER,y_GER,'-', 'LineWidth', lw, 'Color', [0 0 0],'HandleVisibility','off');
     plot(x_AUT,y_AUT,'-', 'LineWidth', lw, 'Color', [0 0 0 ],'HandleVisibility','off');
     plot(x_SUI,y_SUI,'-', 'LineWidth', lw, 'Color', [0 0 0 ],'HandleVisibility','off');
+    for state = 1:length(Germany_NUTS_shp)
+          X = Germany_NUTS_shp(state).X;
+          Y = Germany_NUTS_shp(state).Y;
+          plot(X,Y,'-', 'LineWidth', lw, 'Color', [0 0 0],'HandleVisibility','off');
+    end
 end
 
 
