@@ -18,8 +18,8 @@ cfg.sampling_rate = 5; % [s]
 cfg.duration = 0.1      % [days] Sets the simulation time 
 
 % Revolution Filter
-cfg.rev_filter = false;
-cfg.rev = [1 48];
+cfg.rev_filter = true;
+cfg.rev = [1];
 
 %% Animation
 cfg.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation

@@ -15,7 +15,7 @@ addpath('functions/plotting');
 addpath('functions/plotting/autoArrangeFigures');
 addpath('functions/utils');
 %% Select config and initialize parameters and physical constants
-run cfg_460km.m
+run cfg_410km.m
 run physical_constants
 
 % Compute repeat orbit parameters
@@ -27,10 +27,30 @@ coe = define_coe(rop, cfg, const);
 %% Compute sensor GSD and swath width for given orbits
 % define sensor objects and compute swathwidth and GSD at a given altitude
 MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096, 10, 2600, 7);
-[sensor.sw sensor.GSD_acrosstrack] = MultiScape100.getSwathwidthGSD(rop(cfg.selector,3)*1000);
+[sensor.sw sensor.GSD_acrosstrack] = MultiScape100.getSwathwidthGSD(coe.alt*1000);
 
 % Compute dRAAN for the given swathwidth and the wanted overlap
 dLOAN = dLOAN4swath(sensor.sw, cfg.overlap);
+
+%% Load decayed orbit profile, update orbit parameters
+run cfg_410km_decay.m
+% Compute repeat orbit parameters
+rop_decay = RepOrbParam(cfg_decay.hr,cfg_decay.ndr,cfg_decay.i);
+
+% define constant orbit elements (coe) for selected orbit
+coe_decay = define_coe(rop_decay, cfg_decay, const);
+
+% replace 
+% coe_decay.inc = coe.inc; %optional
+[sensor.sw sensor.GSD_acrosstrack] = MultiScape100.getSwathwidthGSD(coe_decay.alt*1000);
+
+dTrue_anom= seconds(hours(dLOAN/15))*(360/coe.tr);
+dLOAN_decay=dTrue_anom*(coe_decay.tr/360)*15/3600;
+
+coe = coe_decay;
+dLOAN = dLOAN_decay;
+
+
 
 %% Compute orbit positions and velocities for every satellite
 for num_sat = 1:cfg.num_sats
@@ -47,6 +67,7 @@ for num_sat = 1:cfg.num_sats
     satellites.('s'+string(num_sat)).efp = efp;
     satellites.('s'+string(num_sat)).tim = tim;
     satellites.('s'+string(num_sat)).iop = iop;
+    [~,satellites.('s'+string(num_sat)).True_anom] = trueAnomaly(lan, coe.tr);
 end
 
 %% Compute eclipse time for the orbit in minutes
@@ -84,3 +105,29 @@ bps_X=50e6;
 
 stations = ground_stations(satellites.s1.efp,satellites.s1.tim,mask_angle,bps_S,bps_X);
 
+%% Orbit Decay Investigation
+%% Define range of orbit height and nodal days and inclination
+hr = [300, 500];                            % altitude range in km
+ndr = [2, 50];                               % nodal days range 
+i = 's';                                    % stands for 'sun-synchronous'
+
+% Compute repeat orbit parameters
+rop = RepOrbParam(hr,ndr,i);
+
+map = jet(range(ndr)+1);
+
+figure;
+for i = 1:length(rop(:,4))
+    plot(rop(i,4),rop(i,3),'.','color',map(rop(i,1)-rop(1,1)+1,:));
+    hold on;
+end
+
+xlabel('Inclination [degree]');
+ylabel('Orbit Height [km]');
+%Set the current Colormap
+colormap(map);
+%Display Colorbar
+h = colorbar('Ticks',0:0.1:1,...
+    'TickLabels',num2cell(round(linspace(ndr(1),ndr(2),11))));
+ylabel(h, 'Nodal Day')
+title('Orbit Decay');
