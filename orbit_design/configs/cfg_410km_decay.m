@@ -3,8 +3,8 @@
 % simply have to choose the config in orbit_design.m and run the code
 
 %% Define range of orbit height and nodal days and inclination
-cfg_decay.hr = [250, 300];    % altitude range in km
-cfg_decay.ndr = [2, 30];       % nodal days range 
+cfg_decay.hr = [400, 410];    % altitude range in km
+cfg_decay.ndr = [2, 50];       % nodal days range 
 cfg_decay.i = 's';            % stands for 'sun-synchronous'
 cfg_decay.rep = 0;            % Exact orbit repat to False (default)
 

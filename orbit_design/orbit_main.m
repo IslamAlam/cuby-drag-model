@@ -41,7 +41,7 @@ rop_decay = RepOrbParam(cfg_decay.hr,cfg_decay.ndr,cfg_decay.i);
 coe_decay = define_coe(rop_decay, cfg_decay, const);
 
 % replace 
-% coe_decay.inc = coe.inc; %optional
+coe_decay.inc = coe.inc; %optional
 [sensor.sw sensor.GSD_acrosstrack] = MultiScape100.getSwathwidthGSD(coe_decay.alt*1000);
 
 dTrue_anom= seconds(hours(dLOAN/15))*(360/coe.tr);
@@ -107,8 +107,8 @@ stations = ground_stations(satellites.s1.efp,satellites.s1.tim,mask_angle,bps_S,
 
 %% Orbit Decay Investigation
 %% Define range of orbit height and nodal days and inclination
-hr = [300, 500];                            % altitude range in km
-ndr = [2, 50];                               % nodal days range 
+hr = [400, 420];                            % altitude range in km
+ndr = [2,100];                               % nodal days range 
 i = 's';                                    % stands for 'sun-synchronous'
 
 % Compute repeat orbit parameters
@@ -130,4 +130,4 @@ colormap(map);
 h = colorbar('Ticks',0:0.1:1,...
     'TickLabels',num2cell(round(linspace(ndr(1),ndr(2),11))));
 ylabel(h, 'Nodal Day')
-title('Orbit Decay');
+title('Sun-synchronous Orbits');
