@@ -15,11 +15,11 @@ cfg.selector = 1;       % Chooses the corresponding orbit
 
 %% Simulation time
 cfg.sampling_rate = 5; % [s]
-cfg.duration = 0.1     % [days] Sets the simulation time 
+cfg.duration = 60      % [days] Sets the simulation time 
 
 % Revolution Filter
-cfg.rev_filter = false;
-cfg.rev = [1 48];
+cfg.rev_filter = true;
+cfg.rev = [1 32 63 94 125 156 187 218 249 280 311 342 373 404 435 466 497 528 559 590 621];
 
 %% Animation
 cfg.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation
