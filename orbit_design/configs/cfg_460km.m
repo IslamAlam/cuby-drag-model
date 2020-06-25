@@ -39,6 +39,8 @@ cfg.plot_animation = false;  % create animated plot of Bavaria region
 cfg.visualize_bavaria_extent = false; % Plot geographic extent in flight direction
 cfg.swath_color = [0, 0, 0.5]; % rgb triplet defining the color of the ground track
 cfg.plot_only_ascending = true;
+cfg.GermanyAustriaSwitzerland = true; % if true, plots the ground swath 
+% over Germany, Austrie and Switzerland
 %% Initialize temporary parameters
 cfg.dLOAN = 0;          % [°] initializing, will be changed in first iteration
 cfg.startLOAN = 25.3;     % [°]
