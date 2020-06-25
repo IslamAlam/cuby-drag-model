@@ -3,9 +3,9 @@
 % simply have to choose the config in orbit_design.m and run the code
 
 %% Define range of orbit height and nodal days and inclination
-cfg_decay.hr = [400, 410];    % altitude range in km
-cfg_decay.ndr = [2, 50];       % nodal days range 
-cfg_decay.i = 's';            % stands for 'sun-synchronous'
+cfg_decay.hr = [409, 410];    % altitude range in km
+cfg_decay.ndr = [2, 100];       % nodal days range 
+cfg_decay.i = 97.068857314915150;            % inc for 410km orbit
 cfg_decay.rep = 0;            % Exact orbit repat to False (default)
 
 cfg_decay.num_sats = 23;       % number of satellites
@@ -15,11 +15,11 @@ cfg_decay.selector = 1;       % Chooses the corresponding orbit
 
 %% Simulation time
 cfg_decay.sampling_rate = 5; % [s]
-cfg_decay.duration = 0.1      % [days] Sets the simulation time 
+cfg_decay.duration = 60      % [days] Sets the simulation time 
 
 % Revolution Filter
 cfg_decay.rev_filter = true;
-cfg_decay.rev = [1];
+cfg_decay.rev = [1 32 63 94 125 156 187 218 249 280 311 342 373 404 435 466 497 528 559 590 621];
 
 %% Animation
 cfg_decay.animation_sampling_rate = 30; % [Hz] sets sampling rate of the animation

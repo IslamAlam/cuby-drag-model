@@ -32,7 +32,8 @@ MultiScape100 = CubySensor('MultiScape100', 580e-3, 5.4e-6, 4096, 10, 2600, 7);
 % Compute dRAAN for the given swathwidth and the wanted overlap
 dLOAN = dLOAN4swath(sensor.sw, cfg.overlap);
 
-%% Load decayed orbit profile, update orbit parameters
+%% Orbit Decay Investigation
+% Load decayed orbit profile, update orbit parameters
 run cfg_410km_decay.m
 % Compute repeat orbit parameters
 rop_decay = RepOrbParam(cfg_decay.hr,cfg_decay.ndr,cfg_decay.i);
@@ -47,10 +48,30 @@ coe_decay.inc = coe.inc; %optional
 dTrue_anom= seconds(hours(dLOAN/15))*(360/coe.tr);
 dLOAN_decay=dTrue_anom*(coe_decay.tr/360)*15/3600;
 
-coe = coe_decay;
-dLOAN = dLOAN_decay;
+% cfg= cfg_decay;
+% coe = coe_decay;
+% dLOAN = dLOAN_decay;
 
+%% Compute Groundtrack difference
+lan = cfg.startLOAN - (cfg.num_sats-1)*dLOAN;
+[efp,tim,iop]=reporbgen_noderot2(coe.nod, coe.nor, ...
+    coe.rep, coe.num, coe.dur, coe.sma, coe.inc, lan, ...
+    coe.man, coe.ecc, coe.aop);
 
+if cfg.rev_filter == true
+    [efp,tim,iop] = RevFilter(efp,tim,iop,coe.tr,cfg.rev);
+end
+
+lan = cfg_decay.startLOAN - (cfg_decay.num_sats-1)*dLOAN_decay;
+[efp_decay,tim_decay,iop_decay]=reporbgen_noderot2(coe_decay.nod, coe_decay.nor, ...
+    coe_decay.rep, coe_decay.num, coe_decay.dur, coe_decay.sma, coe_decay.inc, lan, ...
+    coe_decay.man, coe_decay.ecc, coe_decay.aop);
+
+if cfg_decay.rev_filter == true
+    [efp_decay,tim_decay,iop_decay] = RevFilter(efp_decay,tim_decay,iop_decay,coe_decay.tr,cfg_decay.rev);
+end
+
+[x_disp acs_discp] = GroundTrackDisplacement(efp,efp_decay);
 
 %% Compute orbit positions and velocities for every satellite
 for num_sat = 1:cfg.num_sats
@@ -93,6 +114,7 @@ stereo.dLOAN_base = dLOAN4dt(stereo.dt_base, stereo.baseline);
 
 %% ground track over time
 coe.groundtrackshift_info = GroundTrackShiftOverTime(coe.nod,coe.nor,coe.gts);
+coe_decay.groundtrackshift_info = GroundTrackShiftOverTime(coe_decay.nod,coe_decay.nor,coe_decay.gts);
 
 %% Downlink
 [roi.acr_track_tot_exd,roi.alo_track_tot_exd,roi.obs_tim,sensor.GSD_alongtrack] = Bavaria_total_extend(satellites.s1.efp,satellites.s1.tim,MultiScape100.line_rate, cfg);
@@ -105,29 +127,6 @@ bps_X=50e6;
 
 stations = ground_stations(satellites.s1.efp,satellites.s1.tim,mask_angle,bps_S,bps_X);
 
-%% Orbit Decay Investigation
-%% Define range of orbit height and nodal days and inclination
-hr = [400, 420];                            % altitude range in km
-ndr = [2,100];                               % nodal days range 
-i = 's';                                    % stands for 'sun-synchronous'
 
-% Compute repeat orbit parameters
-rop = RepOrbParam(hr,ndr,i);
 
-map = jet(range(ndr)+1);
 
-figure;
-for i = 1:length(rop(:,4))
-    plot(rop(i,4),rop(i,3),'.','color',map(rop(i,1)-rop(1,1)+1,:));
-    hold on;
-end
-
-xlabel('Inclination [degree]');
-ylabel('Orbit Height [km]');
-%Set the current Colormap
-colormap(map);
-%Display Colorbar
-h = colorbar('Ticks',0:0.1:1,...
-    'TickLabels',num2cell(round(linspace(ndr(1),ndr(2),11))));
-ylabel(h, 'Nodal Day')
-title('Sun-synchronous Orbits');
